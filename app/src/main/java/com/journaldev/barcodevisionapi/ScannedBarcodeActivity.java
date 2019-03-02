@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,12 +16,26 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class ScannedBarcodeActivity extends AppCompatActivity {
 
@@ -32,7 +47,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button btnAction;
     String intentData = "";
-    //boolean isEmail = false;
 
 
     @Override
@@ -54,10 +68,56 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (intentData.length() > 0) {
-                    //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(intentData)));
-                    /*
-                    Write down the API code here and snakebox
-                     */
+                    try {
+                        Toast.makeText(ScannedBarcodeActivity.this, intentData, Toast.LENGTH_SHORT).show();
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        String URL = "http://192.168.43.178:8000/drugqr/";
+                        JSONObject jsonBody = new JSONObject();
+                        jsonBody.put("qr_code", intentData);
+                        final String mRequestBody = jsonBody.toString();
+
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(ScannedBarcodeActivity.this, response, Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("LOG_VOLLEY", error.toString());
+                            }
+                        }) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8";
+                            }
+
+                            @Override
+                            public byte[] getBody() throws AuthFailureError {
+                                try {
+                                    return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                                } catch (UnsupportedEncodingException uee) {
+                                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                                    return null;
+                                }
+                            }
+
+                            @Override
+                            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                                String responseString = "";
+                                if (response != null) {
+
+                                    responseString = String.valueOf(response.statusCode);
+
+                                }
+                                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                            }
+                        };
+
+                        requestQueue.add(stringRequest);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
 
@@ -126,9 +186,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                             btnAction.setText("Verify");
                             intentData = barcodes.valueAt(0).displayValue;
-                            if(intentData.length() != 5){
-                                Toast.makeText(ScannedBarcodeActivity.this, "Fuck you bitch! That is not our drug!", Toast.LENGTH_SHORT).show();
-                            }
+
                             txtBarcodeValue.setText(intentData);
                         }
                     });

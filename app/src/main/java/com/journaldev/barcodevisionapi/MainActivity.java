@@ -32,4 +32,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent signupMover = new Intent(getApplicationContext(),SignupActivity.class);
         startActivity(signupMover);
     }
+
+    public void moveLogin(View v){
+        Intent loginMover = new Intent(getApplicationContext(),LoginActivity.class);
+        startActivity(loginMover);
+    }
 }
