@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -18,14 +17,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,11 +71,11 @@ public class SignupActivity extends AppCompatActivity {
                     {
                         Map<String, String>  params = new HashMap<>();
                         // the POST parameters:
-                        params.put("username", "test");
-                        params.put("firstName", "Test");
-                        params.put("lastName", "TestL");
-                        params.put("email", "test@test.com");
-                        params.put("password","pass@1123");
+                        params.put("username", username);
+                        params.put("firstName", firstname);
+                        params.put("lastName", lastname);
+                        params.put("email", email);
+                        params.put("password",password);
                         return params;
                     }
                 };
