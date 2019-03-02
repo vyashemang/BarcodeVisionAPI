@@ -16,4 +16,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="146dp"
         android:text="@string/scan_barcode" />
+
+    <Button
+        android:id="@+id/bt_main_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="signup"
+        android:onClick="moveSignup"/>
 </RelativeLayout>

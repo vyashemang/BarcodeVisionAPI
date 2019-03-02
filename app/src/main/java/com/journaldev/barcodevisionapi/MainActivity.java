@@ -27,4 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         startActivity(new Intent(MainActivity.this, ScannedBarcodeActivity.class));
     }
+
+    public void moveSignup(View v){
+        Intent signupMover = new Intent(getApplicationContext(),SignupActivity.class);
+        startActivity(signupMover);
+    }
 }
