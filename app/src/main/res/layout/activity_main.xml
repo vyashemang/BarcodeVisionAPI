@@ -12,8 +12,8 @@
         android:id="@+id/btnScanBarcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="187dp"
+        android:layout_marginBottom="146dp"
         android:text="@string/scan_barcode" />
 </RelativeLayout>

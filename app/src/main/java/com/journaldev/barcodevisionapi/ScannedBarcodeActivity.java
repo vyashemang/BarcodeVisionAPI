@@ -32,7 +32,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button btnAction;
     String intentData = "";
-    boolean isEmail = false;
+    //boolean isEmail = false;
 
 
     @Override
@@ -75,7 +75,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
                 .setRequestedPreviewSize(1920, 1080)
-                .setAutoFocusEnabled(true) //you should add this feature
+                .setAutoFocusEnabled(true)
                 .build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -126,6 +126,9 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                             btnAction.setText("Verify");
                             intentData = barcodes.valueAt(0).displayValue;
+                            if(intentData.length() != 5){
+                                Toast.makeText(ScannedBarcodeActivity.this, "Fuck you bitch! That is not our drug!", Toast.LENGTH_SHORT).show();
+                            }
                             txtBarcodeValue.setText(intentData);
                         }
                     });
